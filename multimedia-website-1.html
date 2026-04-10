@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOVA — Multimedia Experience</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080810;
+      --surface: #0f0f1a;
+      --card: #14141f;
+      --accent: #ff3c6e;
+      --accent2: #00e5ff;
+      --accent3: #a259ff;
+      --text: #f0eeff;
+      --muted: #6e6e8a;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent2);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.18s ease;
+      opacity: 0.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 3rem;
+      background: rgba(8,8,16,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 3rem 4rem;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.25;
+      animation: blobFloat 8s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -100px; left: -150px; animation-delay: 0s; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent3); bottom: -100px; right: -100px; animation-delay: 2s; }
+    .blob-3 { width: 350px; height: 350px; background: var(--accent2); top: 40%; left: 40%; animation-delay: 4s; }
+
+    @keyframes blobFloat {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.08); }
+    }
+
+    /* grid lines */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, transparent 70%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      border: 1px solid rgba(0,229,255,0.3);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.8rem;
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent), var(--accent3), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 580px;
+      margin: 0 auto 3rem;
+      animation: fadeUp 0.8s ease 0.6s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s ease 0.8s both;
+    }
+
+    .btn {
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,60,110,0.4); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--card); transform: translateY(-3px); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTION COMMON */
+    section { padding: 7rem 3rem; }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    /* GALLERY */
+    .gallery-section { background: var(--surface); }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: var(--card);
+      cursor: pointer;
+    }
+
+    .gallery-item:nth-child(1) { grid-column: span 2; aspect-ratio: 16/7; }
+    .gallery-item:nth-child(2) { aspect-ratio: 9/10; }
+    .gallery-item:nth-child(3) { aspect-ratio: 4/3; }
+    .gallery-item:nth-child(4) { aspect-ratio: 4/3; }
+    .gallery-item:nth-child(5) { grid-column: span 1; aspect-ratio: 9/10; }
+
+    .gallery-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      background: linear-gradient(135deg, var(--card), var(--surface));
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* animated gradient backgrounds for gallery items */
+    .gallery-item:nth-child(1) .gallery-placeholder { background: linear-gradient(135deg, #1a0a1e, #2d0a3d); }
+    .gallery-item:nth-child(2) .gallery-placeholder { background: linear-gradient(135deg, #0a1a1e, #0a2d35); }
+    .gallery-item:nth-child(3) .gallery-placeholder { background: linear-gradient(135deg, #1e0a0a, #3d1010); }
+    .gallery-item:nth-child(4) .gallery-placeholder { background: linear-gradient(135deg, #0a1a0a, #0a2d0a); }
+    .gallery-item:nth-child(5) .gallery-placeholder { background: linear-gradient(135deg, #1a1a0a, #2d2d0a); }
+
+    .gallery-item-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+    }
+
+    .gallery-item:hover .gallery-item-label { opacity: 1; transform: translateY(0); }
+    .gallery-item:hover { transform: scale(1.02); transition: transform 0.3s; }
+
+    .gallery-item-label h4 { font-family: 'Syne', sans-serif; font-size: 1rem; }
+    .gallery-item-label p { color: var(--muted); font-size: 0.8rem; }
+
+    /* decorative shape inside gallery items */
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.4;
+    }
+
+    /* VIDEO SECTION */
+    .video-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .video-wrapper {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .video-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      background: linear-gradient(135deg, #0d0d1f, #1a0a2e);
+    }
+
+    .play-btn {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 0 0 rgba(255,60,110,0.4);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .play-btn:hover { transform: scale(1.15); }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,60,110,0.4); }
+      50% { box-shadow: 0 0 0 20px rgba(255,60,110,0); }
+    }
+
+    .play-btn svg { margin-left: 6px; }
+
+    .video-info { color: var(--muted); font-size: 0.9rem; }
+
+    .video-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .meta-item .num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .meta-item .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* ANIMATION SECTION */
+    .animation-section { background: var(--surface); }
+
+    .anim-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .anim-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .anim-card:hover { border-color: var(--accent3); transform: translateY(-5px); }
+
+    .anim-preview {
+      height: 140px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* Animation 1 - Spinning ring */
+    .ring-anim {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: var(--accent);
+      border-right-color: var(--accent3);
+      animation: spin 2s linear infinite;
+      position: relative;
+    }
+    .ring-anim::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-bottom-color: var(--accent2);
+      animation: spin 1.5s linear infinite reverse;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Animation 2 - Bouncing dots */
+    .dots-anim {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .dot:nth-child(1) { background: var(--accent); animation-delay: 0s; }
+    .dot:nth-child(2) { background: var(--accent3); animation-delay: 0.2s; }
+    .dot:nth-child(3) { background: var(--accent2); animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-30px); }
+    }
+
+    /* Animation 3 - Morphing shape */
+    .morph-anim {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      animation: morph 3s ease-in-out infinite;
+    }
+    @keyframes morph {
+      0%, 100% { border-radius: 50% 30% 60% 40% / 40% 60% 30% 50%; transform: rotate(0deg); }
+      25% { border-radius: 30% 60% 40% 70% / 60% 30% 70% 40%; transform: rotate(90deg); }
+      50% { border-radius: 60% 40% 30% 50% / 30% 70% 40% 60%; transform: rotate(180deg); }
+      75% { border-radius: 40% 70% 60% 30% / 70% 40% 60% 30%; transform: rotate(270deg); }
+    }
+
+    /* Animation 4 - Wave bars */
+    .wave-anim {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 60px;
+    }
+    .bar {
+      width: 10px;
+      border-radius: 4px;
+      animation: wave 1s ease-in-out infinite;
+    }
+    .bar:nth-child(odd) { background: var(--accent); }
+    .bar:nth-child(even) { background: var(--accent3); }
+    .bar:nth-child(1) { animation-delay: 0s; }
+    .bar:nth-child(2) { animation-delay: 0.1s; }
+    .bar:nth-child(3) { animation-delay: 0.2s; }
+    .bar:nth-child(4) { animation-delay: 0.3s; }
+    .bar:nth-child(5) { animation-delay: 0.4s; }
+    .bar:nth-child(6) { animation-delay: 0.5s; }
+    @keyframes wave {
+      0%, 100% { height: 10px; }
+      50% { height: 60px; }
+    }
+
+    /* Animation 5 - Rotating gradient square */
+    .gradient-sq {
+      width: 80px; height: 80px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+      background-size: 300% 300%;
+      animation: gradientMove 3s ease infinite, squareSpin 4s linear infinite;
+    }
+    @keyframes gradientMove {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes squareSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Animation 6 - Particle burst */
+    .particles-anim {
+      position: relative;
+      width: 80px; height: 80px;
+    }
+    .particle {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      animation: orbit 2.5s linear infinite;
+    }
+    .particle:nth-child(1) { background: var(--accent);  animation-delay: 0s;    transform-origin: -25px 0; }
+    .particle:nth-child(2) { background: var(--accent3); animation-delay: -0.6s; transform-origin: -30px 0; }
+    .particle:nth-child(3) { background: var(--accent2); animation-delay: -1.2s; transform-origin: -20px 0; }
+    .particle:nth-child(4) { background: var(--accent);  animation-delay: -1.8s; transform-origin: -35px 0; }
+    @keyframes orbit {
+      to { transform: rotate(360deg); }
+    }
+
+    .anim-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .anim-desc { color: var(--muted); font-size: 0.87rem; line-height: 1.6; }
+
+    /* TEXT SECTION */
+    .text-section {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .text-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .text-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .typo-demo {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .typo-demo::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--accent), var(--accent3));
+    }
+
+    .typo-demo .big-char {
+      font-family: 'Syne', sans-serif;
+      font-size: 5rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent3), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .typo-demo p { color: var(--muted); line-height: 1.8; font-size: 0.95rem; }
+
+    .ticker-wrapper {
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 0;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 3rem;
+      animation: ticker 12s linear infinite;
+      white-space: nowrap;
+    }
+
+    .ticker-item {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .ticker-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .highlight-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+    }
+
+    .highlight-text .underline-animated {
+      position: relative;
+      display: inline-block;
+      color: var(--accent);
+    }
+    .highlight-text .underline-animated::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent3));
+      border-radius: 2px;
+      animation: expandLine 2s ease-in-out infinite alternate;
+      transform-origin: left;
+    }
+    @keyframes expandLine {
+      from { transform: scaleX(0.2); }
+      to   { transform: scaleX(1); }
+    }
+
+    /* STATS BAND */
+    .stats-band {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 50%, var(--accent2) 100%);
+      padding: 4rem 3rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 4rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy { color: var(--muted); font-size: 0.85rem; }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:nth-child(1) { grid-column: span 2; }
+      .gallery-item:nth-child(5) { grid-column: span 2; }
+      .video-section, .text-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .anim-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:nth-child(1),
+      .gallery-item:nth-child(5) { grid-column: span 1; }
+      .anim-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">NOVA</div>
+    <ul class="nav-links">
+      <li><a href="#gallery">Galeri</a></li>
+      <li><a href="#video">Video</a></li>
+      <li><a href="#animasi">Animasi</a></li>
+      <li><a href="#teks">Tipografi</a></li>
+    </ul>
+    <a href="#" class="btn btn-primary" style="padding:0.6rem 1.4rem;font-size:0.85rem;">Mulai</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">✦ Platform Multimedia Modern</div>
+      <h1 class="hero-title">
+        Satu Tempat<br><span>Semua Media</span>
+      </h1>
+      <p class="hero-sub">
+        Jelajahi dunia multimedia lengkap — dari gambar, video, animasi, hingga tipografi yang hidup dan memukau.
+      </p>
+      <div class="hero-buttons">
+        <a href="#gallery" class="btn btn-primary">Jelajahi Konten →</a>
+        <a href="#video" class="btn btn-secondary">▶ Tonton Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header reveal">
+      <div>
+        <p class="section-label">📷 Galeri Gambar</p>
+        <h2 class="section-title">Koleksi Visual<br>Terbaik Kami</h2>
+      </div>
+      <p class="section-desc">
+        Setiap gambar adalah cerita. Telusuri koleksi kami yang mencakup berbagai gaya dan estetika.
+      </p>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="shape" style="width:200px;height:200px;background:var(--accent);top:-50px;left:-50px;"></div>
+          <div class="shape" style="width:150px;height:150px;background:var(--accent3);bottom:-30px;right:-30px;"></div>
+          <span style="font-size:4rem;z-index:1">🌌</span>
+        </div>
+        <div class="gallery-item-label">
+          <h4>Galaksi Dalam Pikiran</h4>
+          <p>Digital Art · 2024</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="shape" style="width:120px;height:120px;background:var(--accent2);top:-20px;right:-20px;"></div>
+          <span style="font-size:3.5rem;z-index:1">🌊</span>
+        </div>
+        <div class="gallery-item-label">
+          <h4>Ombak Digital</h4>
+          <p>3D Render · 2024</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="shape" style="width:100px;height:100px;background:var(--accent);bottom:-10px;left:-10px;"></div>
+          <span style="font-size:3.5rem;z-index:1">🔥</span>
+        </div>
+        <div class="gallery-item-label">
+          <h4>Api Kreatif</h4>
+          <p>Motion Art · 2024</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="shape" style="width:150px;height:150px;background:var(--accent3);top:-30px;right:-30px;"></div>
+          <span style="font-size:3.5rem;z-index:1">🌿</span>
+        </div>
+        <div class="gallery-item-label">
+          <h4>Alam Digital</h4>
+          <p>Illustration · 2024</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="shape" style="width:180px;height:180px;background:var(--accent2);top:-40px;left:-40px;"></div>
+          <span style="font-size:3.5rem;z-index:1">✨</span>
+        </div>
+        <div class="gallery-item-label">
+          <h4>Sinar Cahaya</h4>
+          <p>Photography · 2024</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section id="video" style="max-width:1300px;margin:0 auto;padding:7rem 3rem;">
+    <div class="video-section">
+      <div class="reveal">
+        <p class="section-label">🎬 Video</p>
+        <h2 class="section-title">Cerita Bergerak<br>yang Menginspirasi</h2>
+        <p class="section-desc">
+          Video adalah medium paling kuat. Rasakan setiap frame yang dirancang untuk membuat Anda terpukau.
+        </p>
+        <div class="video-meta">
+          <div class="meta-item"><span class="num">4K</span><span class="label">Resolusi</span></div>
+          <div class="meta-item"><span class="num">60fps</span><span class="label">Frame Rate</span></div>
+          <div class="meta-item"><span class="num">HDR</span><span class="label">Warna</span></div>
+        </div>
+      </div>
+      <div class="video-wrapper reveal">
+        <div class="video-placeholder">
+          <div class="play-btn" onclick="this.style.transform='scale(0.9)';setTimeout(()=>this.style.transform='',150)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
+          </div>
+          <p class="video-info">Klik untuk memutar video demo</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANIMATION -->
+  <section class="animation-section" id="animasi">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
+      <p class="section-label">🎨 Animasi</p>
+      <h2 class="section-title">Gerak yang<br>Memukau Mata</h2>
+      <p class="section-desc" style="margin:0 auto;">Animasi murni CSS yang berjalan dengan mulus di semua perangkat.</p>
+    </div>
+    <div class="anim-grid reveal">
+      <div class="anim-card">
+        <div class="anim-preview"><div class="ring-anim"></div></div>
+        <div>
+          <div class="anim-title">Spinning Ring</div>
+          <div class="anim-desc">Cincin berputar dua lapis dengan warna gradien yang kontras dan dinamis.</div>
+        </div>
+      </div>
+      <div class="anim-card">
+        <div class="anim-preview"><div class="dots-anim"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+        <div>
+          <div class="anim-title">Bouncing Dots</div>
+          <div class="anim-desc">Titik-titik berwarna yang memantul secara bergantian dengan timing sempurna.</div>
+        </div>
+      </div>
+      <div class="anim-card">
+        <div class="anim-preview"><div class="morph-anim"></div></div>
+        <div>
+          <div class="anim-title">Shape Morphing</div>
+          <div class="anim-desc">Bentuk yang terus berubah organik seperti makhluk hidup yang bernafas.</div>
+        </div>
+      </div>
+      <div class="anim-card">
+        <div class="anim-preview"><div class="wave-anim"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>
+        <div>
+          <div class="anim-title">Audio Wave</div>
+          <div class="anim-desc">Visualisasi gelombang audio yang berdenyut mengikuti ritme musik imajiner.</div>
+        </div>
+      </div>
+      <div class="anim-card">
+        <div class="anim-preview"><div class="gradient-sq"></div></div>
+        <div>
+          <div class="anim-title">Gradient Shift</div>
+          <div class="anim-desc">Kotak dengan gradien bergerak dan rotasi yang menciptakan hipnotis visual.</div>
+        </div>
+      </div>
+      <div class="anim-card">
+        <div class="anim-preview"><div class="particles-anim"><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div></div></div>
+        <div>
+          <div class="anim-title">Orbit Particles</div>
+          <div class="anim-desc">Partikel-partikel yang mengorbit seperti planet mengelilingi bintangnya.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEXT / TYPOGRAPHY -->
+  <section id="teks">
+    <div class="text-section">
+      <div class="text-grid">
+        <div class="reveal">
+          <p class="section-label">✍️ Tipografi</p>
+          <h2 class="section-title">Kata-kata yang<br>Hidup & Bernapas</h2>
+          <p class="section-desc">Tipografi bukan sekadar huruf — ia adalah ekspresi, emosi, dan identitas yang berbicara sebelum dibaca.</p>
+          <br/>
+          <p class="highlight-text">
+            Desain yang <span class="underline-animated">indah</span><br>dimulai dari huruf.
+          </p>
+        </div>
+        <div class="text-showcase reveal">
+          <div class="typo-demo">
+            <div class="big-char">Aa</div>
+            <p>Syne — Display typeface dengan kepribadian kuat dan geometris yang kokoh untuk judul impactful.</p>
+          </div>
+          <div class="ticker-wrapper">
+            <div class="ticker">
+              <span class="ticker-item"><span class="ticker-dot"></span>MULTIMEDIA</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>DESAIN</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>ANIMASI</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>VIDEO</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>KREATIF</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>INOVASI</span>
+              <!-- duplicate for seamless loop -->
+              <span class="ticker-item"><span class="ticker-dot"></span>MULTIMEDIA</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>DESAIN</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>ANIMASI</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>VIDEO</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>KREATIF</span>
+              <span class="ticker-item"><span class="ticker-dot"></span>INOVASI</span>
+            </div>
+          </div>
+          <div class="typo-demo">
+            <div class="big-char" style="font-size:3rem">DM</div>
+            <p>DM Sans — Body typeface yang ramah dan mudah dibaca dengan bobot yang bervariasi untuk konten panjang.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Karya Digital</div>
+      </div>
+      <div>
+        <div class="stat-num">4K</div>
+        <div class="stat-label">Video Resolusi</div>
+      </div>
+      <div>
+        <div class="stat-num">12M</div>
+        <div class="stat-label">Penonton</div>
+      </div>
+      <div>
+        <div class="stat-num">99%</div>
+        <div class="stat-label">Kepuasan</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">NOVA</div>
+    <ul class="footer-links">
+      <li><a href="#">Tentang</a></li>
+      <li><a href="#">Karya</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Kontak</a></li>
+    </ul>
+    <p class="footer-copy">© 2024 NOVA Multimedia. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    (function animateCursor() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    // Hover effect on cards
+    document.querySelectorAll('.anim-card, .gallery-item, .btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+        ring.style.transform = 'translate(-50%,-50%) scale(0.5)';
+        ring.style.borderColor = 'var(--accent)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.borderColor = 'var(--accent2)';
+      });
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Counter animation for stats
+    function animateCounter(el, target, suffix='') {
+      let start = 0;
+      const duration = 2000;
+      const step = timestamp => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const val = Math.floor(progress * target);
+        el.textContent = val + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    const statsObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const nums = entry.target.querySelectorAll('.stat-num');
+          nums[0] && animateCounter(nums[0], 500, '+');
+          nums[2] && animateCounter(nums[2], 12, 'M');
+          nums[3] && animateCounter(nums[3], 99, '%');
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsBand = document.querySelector('.stats-band');
+    if (statsBand) statsObserver.observe(statsBand);
+  </script>
+</body>
+</html>
